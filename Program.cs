@@ -1,25 +1,23 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿// See https://aka.ms/new-console-template for more information
+using System.Text.RegularExpressions;
+using LacunaGenetics.Controller;
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace LacunaGenetics
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    class Program
+    {
+        public static async Task Main()
+         {
+            Console.WriteLine("Enter your username, email and password to register:");
+            User newUser = new User()
+            {
+                username =  Console.ReadLine(),
+                email = Console.ReadLine(),
+                password = Console.ReadLine()
+
+            };
+
+           await UserController.Create(newUser);
+        } 
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
