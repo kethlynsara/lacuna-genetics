@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using LacunaGenetics.Service;
 
 namespace LacunaGenetics.Controller
 {
@@ -29,14 +30,39 @@ namespace LacunaGenetics.Controller
                     var jsonDeserialized = JsonConvert.DeserializeObject<JobResponse>(stringResponse);
                     Console.WriteLine($"job ---------------------------------");
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
-                    Console.WriteLine($"{jsonDeserialized.job}! {jsonDeserialized.job.type}");
+                    Console.WriteLine($"{jsonDeserialized.job.type}! - {jsonDeserialized.job.strand}");
+
+                    Console.WriteLine("job result: " + jsonDeserialized.job);
+
+                    checkJob(jsonDeserialized.job);
 
                     return jsonDeserialized;
                 }
             } 
-
         }
-    
+
+        private static void checkJob(Job job) 
+        {
+            if (job.type == "DecodeStrand") postDecodeToString(job);
+            else if (job.type == "EncodeStrand") postEncodeString(job);
+            else if (job.type == "CheckGene") postCheckGene(job);
+        }
+
+        public static  void postDecodeToString(Job job) {
+            string decodedString = DnaService.decodeToString(job);
+            Console.WriteLine("dedoded string: " + decodedString);
+        } 
+
+        public static void postEncodeString(Job job) {
+            string encodeString  =  DnaService.encodeString(job);
+            Console.WriteLine("endoded string: " + encodeString);
+        }
+
+        public static void postCheckGene(Job job) {
+            bool isActive  =  DnaService.checkGene(job);
+            Console.WriteLine("check gene");
+        }
+        
         private static string getToken(User user) 
         {
             var token = UserController.Login(user);
@@ -49,7 +75,6 @@ namespace LacunaGenetics.Controller
             }
 
             return token;
-        }
-    
+        }    
     }
 }
