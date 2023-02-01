@@ -17,7 +17,7 @@ namespace LacunaGenetics.Controller
                     var payload = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = client.PostAsync(endpoint, payload).Result.Content.ReadAsStringAsync().Result;
 
-                    var jsonDeserialized = JsonConvert.DeserializeObject<Response>(response);
+                    var jsonDeserialized = JsonConvert.DeserializeObject<UserResponse>(response);
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
                 }
             } else
@@ -26,8 +26,29 @@ namespace LacunaGenetics.Controller
             }
         }
     
+        public static async Task Login([Bind(Exclude = "email")] User user) {
+            if (user.validateData())
+            {
+                using(var client =  new HttpClient())
+                {
+                    var endpoint = new Uri("https://gene.lacuna.cc/api/users/login");
 
-    
+                    var json = JsonConvert.SerializeObject(user);
+                    var payload = new StringContent(json, Encoding.UTF8, "application/json");
+                    var response = client.PostAsync(endpoint, payload).Result.Content.ReadAsStringAsync().Result;
+
+                    var jsonDeserialized = JsonConvert.DeserializeObject<LoginResponse>(response);
+                    Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
+
+                    string token = jsonDeserialized.accessToken;
+                    if (token != null) Console.WriteLine("Here's your access token: " + token);
+                    else Console.WriteLine("Bad request!");
+                }
+            } else
+            {
+                 Console.WriteLine("Oops, something went wrong. Check your data!");
+            }
+        }        
     }
     
 }

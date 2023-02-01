@@ -12,7 +12,6 @@ namespace LacunaGenetics
         public bool validateData() 
         {
             Regex usernameRegex = new Regex(@"(^[A-Za-z0-9]{4,32}$)");
-            Console.WriteLine(usernameRegex.Matches(this.username));
             if (!usernameRegex.IsMatch(this.username)) return false;
 
             Regex emailRegex = new Regex(@"(\S+@\S+\.\S+)");

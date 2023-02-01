@@ -1,6 +1,6 @@
 namespace LacunaGenetics
 {
-     public class Response
+     public class UserResponse
      {
         
         public string code { get; set; }
