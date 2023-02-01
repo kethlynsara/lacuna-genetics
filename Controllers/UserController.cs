@@ -3,10 +3,13 @@ using Newtonsoft.Json;
 
 namespace LacunaGenetics.Controller
 {
-    public class UserController {
+    public class UserController 
+    {
         //private readonly UserService userService;
 
-        public static async Task Create(User obj) {
+        public static async Task Create(User obj)
+         {
+
             if (obj.validateData())
             {
                 using(var client =  new HttpClient())
@@ -26,7 +29,8 @@ namespace LacunaGenetics.Controller
             }
         }
     
-        public static string Login([Bind(Exclude = "email")] User user) {
+        public static string Login([Bind(Exclude = "email")] User user) 
+        {
             if (user.validateData())
             {
                 using(var client =  new HttpClient())
@@ -46,13 +50,13 @@ namespace LacunaGenetics.Controller
                         Console.WriteLine("Here's your access token: " + token);
                         return token;
                     } else 
-                        Console.WriteLine("Bad request!");
-                        return "Bad request!";
+                        Console.WriteLine("Something went wrong! Bad request!");
+                        return "Something went wrong! Bad request!";
                 }
             } else
             {
-                 Console.WriteLine("Oops, something went wrong. Check your data!");
-                 return "Oops, something went wrong. Check your data!";
+                 Console.WriteLine("Something went wrong. Check your data!");
+                 return "Something went wrong. Check your data!";
             }
         }        
     }

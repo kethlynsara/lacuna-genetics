@@ -17,7 +17,7 @@ namespace LacunaGenetics
             Regex emailRegex = new Regex(@"(\S+@\S+\.\S+)");
             if (!emailRegex.IsMatch(this.email)) return false;
 
-            Regex passwordRegex = new Regex(@"(^.{1,8}$)");
+            Regex passwordRegex = new Regex(@"(^.{8,}$)");
             if (!passwordRegex.IsMatch(this.password)) return false;
             
             return true;

@@ -20,6 +20,8 @@ namespace LacunaGenetics
             await UserController.Create(newUser);
 
             UserController.Login(newUser);
+
+           await DnaController.GetJob(newUser);
         } 
     }
 }
