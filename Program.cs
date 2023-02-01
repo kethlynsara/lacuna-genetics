@@ -19,7 +19,7 @@ namespace LacunaGenetics
 
             await UserController.Create(newUser);
 
-            await UserController.Login(newUser);
+            UserController.Login(newUser);
         } 
     }
 }

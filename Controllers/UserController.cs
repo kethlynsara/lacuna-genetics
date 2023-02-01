@@ -26,7 +26,7 @@ namespace LacunaGenetics.Controller
             }
         }
     
-        public static async Task Login([Bind(Exclude = "email")] User user) {
+        public static string Login([Bind(Exclude = "email")] User user) {
             if (user.validateData())
             {
                 using(var client =  new HttpClient())
@@ -41,12 +41,18 @@ namespace LacunaGenetics.Controller
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
 
                     string token = jsonDeserialized.accessToken;
-                    if (token != null) Console.WriteLine("Here's your access token: " + token);
-                    else Console.WriteLine("Bad request!");
+                    if (token != null) 
+                    {
+                        Console.WriteLine("Here's your access token: " + token);
+                        return token;
+                    } else 
+                        Console.WriteLine("Bad request!");
+                        return "Bad request!";
                 }
             } else
             {
                  Console.WriteLine("Oops, something went wrong. Check your data!");
+                 return "Oops, something went wrong. Check your data!";
             }
         }        
     }
