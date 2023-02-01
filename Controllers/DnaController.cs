@@ -1,39 +1,45 @@
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace LacunaGenetics.Controller
 {
     public class DnaController 
     {
-        public static async Task GetJob([Bind(Exclude = "email")] User user) 
+
+        public static async Task<JobResponse> GetJob([Bind(Exclude = "email")] User user) 
         {
-            string token = DnaController.getToken(user);
+            var token = DnaController.getToken(user);
             if ("token" != "false")
             {                
-                string url = "https://gene.lacuna.cc/api/dna/jobs";
+                const string url = "https://gene.lacuna.cc/api";
+                HttpClient httpClient = new HttpClient();
 
-                var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-
-                httpRequest.Accept = "application/json";
-                httpRequest.Headers["Authorization"] = "Bearer {token}";
-
-
-                var httpResponse =  (HttpWebResponse)httpRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                using (var request = new HttpRequestMessage(HttpMethod.Get, $"{url}/dna/jobs"))
                 {
-                    var result = streamReader.ReadToEnd();
-                    Console.WriteLine(result);
-                }
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    var response = await httpClient.SendAsync(request);
 
-                Console.WriteLine(httpResponse.StatusCode);
-                
-            }
+                    response.EnsureSuccessStatusCode();
+                    Console.WriteLine("--------------------");
+                    Console.WriteLine(response.Content.ReadAsStringAsync());
+
+                    var stringResponse = await response.Content.ReadAsStringAsync();
+                    var jsonDeserialized = JsonConvert.DeserializeObject<JobResponse>(stringResponse);
+                    Console.WriteLine($"job ---------------------------------");
+                    Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
+                    Console.WriteLine($"{jsonDeserialized.job}! {jsonDeserialized.job.type}");
+
+                    return jsonDeserialized;
+                }
+            } 
 
         }
     
         private static string getToken(User user) 
         {
-            string token = UserController.Login(user);
+            var token = UserController.Login(user);
             string response = token.Substring(0,20);
             Console.WriteLine("response: " + response + response.Length);
 
@@ -42,7 +48,7 @@ namespace LacunaGenetics.Controller
                 return "false";
             }
 
-            return "true";
+            return token;
         }
     
     }
