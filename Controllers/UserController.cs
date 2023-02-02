@@ -5,7 +5,6 @@ namespace LacunaGenetics.Controller
 {
     public class UserController 
     {
-        //private readonly UserService userService;
 
         public static async Task Create(User obj)
          {
@@ -20,7 +19,7 @@ namespace LacunaGenetics.Controller
                     var payload = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = client.PostAsync(endpoint, payload).Result.Content.ReadAsStringAsync().Result;
 
-                    var jsonDeserialized = JsonConvert.DeserializeObject<UserResponse>(response);
+                    var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
                 }
             } else

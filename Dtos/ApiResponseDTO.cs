@@ -1,10 +1,9 @@
 namespace LacunaGenetics
 {
-     public class UserResponse
+     public class ApiResponseDTO
      {
         
         public string code { get; set; }
         public string message { get; set; }
-
     }
 }
