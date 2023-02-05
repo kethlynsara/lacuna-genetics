@@ -44,30 +44,18 @@ namespace LacunaGenetics.Controller
 
         public static async void postDecodeToString(Job job, string token) 
         {
-            Console.WriteLine("encoded string: " + job.strandEncoded);
-            // string decodedString = DnaService.decodeToString(job);
-            // Console.WriteLine("decoded string: " + decodedString);
-            
-            // using (HttpClient httpClient = new HttpClient())
-            // {
-            //     Console.WriteLine("entrou no using");
-            //     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            DecodedStrandResponseDTO decodedString = DnaService.decodeToString(job);            
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 
-            //     var body = new List<KeyValuePair<string, string>>
-            //     {
-            //         new KeyValuePair<string, string>("strand", decodedString),
-            //     };
-
-            //     var json = JsonConvert.SerializeObject(body);
-            //     var payload = new StringContent(json, Encoding.UTF8, "application/json");
-            //     var response = httpClient.PostAsync( $"{url}/{job.id}/decode", payload).Result.Content.ReadAsStringAsync().Result;
-            //     Console.WriteLine("response: " + response);
-            //     var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
-            //     Console.WriteLine($" DECODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
-            //     Console.WriteLine("cade a resposta?????");
-            //     Console.WriteLine("id: " + job.id);
-            //     Console.WriteLine("jsondes: " +jsonDeserialized);
-            // }
+                var json = JsonConvert.SerializeObject(decodedString);
+                var payload = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = httpClient.PostAsync( $"{url}/{job.id}/decode", payload).Result.Content.ReadAsStringAsync().Result;
+                Console.WriteLine("response: " + response);
+                var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
+                Console.WriteLine($" DECODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
+            }
         } 
 
         public static void postEncodeString(Job job) {

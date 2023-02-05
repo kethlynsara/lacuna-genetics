@@ -1,34 +1,50 @@
 using System;
 using System.Text;
+using System.Collections;
+using System.Net;
+using System.Linq;
 
 namespace LacunaGenetics.Service
 {
     
     public class DnaService {
 
-        public static string decodeToString(Job job)
+        public static DecodedStrandResponseDTO decodeToString(Job job)
         {
-            byte[] base64EncodedBytes = Convert.FromBase64String(job.strandEncoded);
-            string result = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-            Console.WriteLine("new new -> " + result);
-            // Console.WriteLine("DECODED: " + System.Convert.FromBase64String(job.strandEncoded));
-            // Console.WriteLine("DECODED: " + BitConverter.ToString(base64EncodedBytes));
-            // //Encoding.UTF8.GetString(base64EncodedBytes)
-            // //ASCIIEncoding.ASCII.GetString(base64EncodedBytes)
-            // var hexaString = BitConverter.ToString(base64EncodedBytes);
-            // string[] hexaSplit = hexaString.Split("-");
-            // string decodedString = "";
-            // foreach (string hex in hexaSplit)
-            // {
-            //     int value = Convert.ToInt32(hex, 16);
-            //     string stringValue = Char.ConvertFromUtf32(value);
-            //     //char charValue = (char)value;
-            //     decodedString += stringValue;
-            // }
+            byte[] bytesArray = Convert.FromBase64String(job.strandEncoded);
+            string hexString = BitConverter.ToString(bytesArray);
+            string hexStringTrim = hexString.Replace("-", "");
+            String binString = hexStringTrim
+                                .Aggregate(new StringBuilder(),(builder, c) => builder
+                                .Append(Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2)
+                                .PadLeft(4, '0')))
+                                .ToString();
+            if (binString.Length % 2 != 0) 
+            {
+                string aux = "0";
+                aux += binString;
+                binString = aux;
+            }
+            string nucleobases = findNucleobases(binString);
+            Console.WriteLine("DECODED: " + nucleobases);
+            DecodedStrandResponseDTO obj = new DecodedStrandResponseDTO();
+            obj.strand = nucleobases;
+            return obj;
+        }
+        private static string findNucleobases(string binString)
+        {
+            string nucleobases = "";
 
-            Console.WriteLine("new string: " + "decodedString");
+            for (int i = 0; i < binString.Length; i+=2)
+            {
+                string aux = $"{binString[i]}{binString[i+1]}";
+                if (aux.Equals("00")) nucleobases += "A";
+                else if (aux.Equals("01")) nucleobases += "C";
+                else if (aux.Equals("10")) nucleobases += "G";
+                else if (aux.Equals("11")) nucleobases += "T";
+            }
 
-            return result;
+            return nucleobases;
         }
 
         public static string encodeString(Job job) 
