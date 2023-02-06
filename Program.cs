@@ -8,8 +8,8 @@ namespace LacunaGenetics
     {
         public static async Task Main()
          {
-            Console.WriteLine("Enter your username, email and password to register:");
-            User newUser = new User()
+            Console.WriteLine("Hello! Enter your username, email and password to register:");
+            UserDTO newUser = new UserDTO()
             {
                 username =  Console.ReadLine(),
                 email = Console.ReadLine(),
@@ -19,9 +19,18 @@ namespace LacunaGenetics
 
             await UserController.Create(newUser);
 
-            UserController.Login(newUser);
+            Console.WriteLine("Enter your username and password to login and request a job:");
+            LoginDTO user = new LoginDTO()
+            {
+                username = Console.ReadLine(),
+                password = Console.ReadLine()
 
-           await DnaController.GetJob(newUser);
+            };
+            UserController.Login(user);
+
+           await DnaController.GetJob(user);
+        
         } 
+
     }
 }

@@ -6,7 +6,7 @@ namespace LacunaGenetics.Controller
     public class UserController 
     {
 
-        public static async Task Create(User obj)
+        public static async Task Create(UserDTO obj)
          {
 
             if (obj.validateData())
@@ -28,7 +28,7 @@ namespace LacunaGenetics.Controller
             }
         }
     
-        public static string Login([Bind(Exclude = "email")] User user) 
+        public static string Login(LoginDTO user) 
         {
             if (user.validateData())
             {
@@ -40,7 +40,7 @@ namespace LacunaGenetics.Controller
                     var payload = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = client.PostAsync(endpoint, payload).Result.Content.ReadAsStringAsync().Result;
 
-                    var jsonDeserialized = JsonConvert.DeserializeObject<LoginResponse>(response);
+                    var jsonDeserialized = JsonConvert.DeserializeObject<LoginResponseDTO>(response);
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
 
                     string token = jsonDeserialized.accessToken;

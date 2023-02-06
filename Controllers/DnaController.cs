@@ -9,7 +9,7 @@ namespace LacunaGenetics.Controller
     {
         private const string url = "https://gene.lacuna.cc/api/dna/jobs";
 
-        public static async Task<JobResponse> GetJob([Bind(Exclude = "email")] User user) 
+        public static async Task<JobResponseDTO> GetJob(LoginDTO user) 
         {
             var token = DnaController.getToken(user);
             if ("token" != "false")
@@ -22,16 +22,11 @@ namespace LacunaGenetics.Controller
                     var response = await httpClient.SendAsync(request);
 
                     response.EnsureSuccessStatusCode();
-                    Console.WriteLine("--------------------");
-                    Console.WriteLine(response.Content.ReadAsStringAsync());
 
                     var stringResponse = await response.Content.ReadAsStringAsync();
-                    var jsonDeserialized = JsonConvert.DeserializeObject<JobResponse>(stringResponse);
+                    var jsonDeserialized = JsonConvert.DeserializeObject<JobResponseDTO>(stringResponse);
                     Console.WriteLine($"job ---------------------------------");
                     Console.WriteLine($"{jsonDeserialized.code}! {jsonDeserialized.message}");
-                    Console.WriteLine($"{jsonDeserialized.job.type}! - {jsonDeserialized.job.strand}");
-                    Console.WriteLine($"{jsonDeserialized.job.type}! - {jsonDeserialized.job.strandEncoded}");
-                    Console.WriteLine($"{jsonDeserialized.job.type}! - {jsonDeserialized.job.geneEncoded}");
 
                     checkJob(jsonDeserialized.job, token);
 
@@ -40,7 +35,7 @@ namespace LacunaGenetics.Controller
             } 
         }        
 
-        public static async void postDecodeToString(Job job, string token) 
+        public static async void postDecodeToString(JobDTO job, string token) 
         {
             DecodedStrandResponseDTO decodedString = DnaService.decodeToString(job.strandEncoded);            
             using (HttpClient httpClient = new HttpClient())
@@ -52,11 +47,11 @@ namespace LacunaGenetics.Controller
                 var response = httpClient.PostAsync( $"{url}/{job.id}/decode", payload).Result.Content.ReadAsStringAsync().Result;
                 Console.WriteLine("response: " + response);
                 var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
-                Console.WriteLine($" DECODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
+                Console.WriteLine($"DECODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
             }
         } 
 
-        public static void postEncodeString(Job job, string token) {
+        public static void postEncodeString(JobDTO job, string token) {
             string encodedString  =  DnaService.encodeString(job);
             Console.WriteLine("encoded string: " + encodedString);
 
@@ -74,11 +69,11 @@ namespace LacunaGenetics.Controller
                 var response = httpClient.PostAsync( $"{url}/{job.id}/encode", payload).Result.Content.ReadAsStringAsync().Result;
                 Console.WriteLine("response: " + response);
                 var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
-                Console.WriteLine($" DECODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
+                Console.WriteLine($" ENCODED API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
             }
         }
 
-        public static void postCheckGene(Job job, string token) {
+        public static void postCheckGene(JobDTO job, string token) {
             CheckGeneResponseDTO isActivatedObj  =  DnaService.checkGene(job);
             using (HttpClient httpClient = new HttpClient())
             {
@@ -93,7 +88,7 @@ namespace LacunaGenetics.Controller
             }
         }
         
-        private static string getToken(User user) 
+        private static string getToken(LoginDTO user) 
         {
             var token = UserController.Login(user);
             string response = token.Substring(0,20);
@@ -107,7 +102,7 @@ namespace LacunaGenetics.Controller
             return token;
         }    
     
-        private static void checkJob(Job job, string token) 
+        private static void checkJob(JobDTO job, string token) 
         {
             if (job.type == "DecodeStrand") postDecodeToString(job, token);
             else if (job.type == "EncodeStrand") postEncodeString(job, token);

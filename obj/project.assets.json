@@ -60,11 +60,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj",
+      "projectUniqueName": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj",
       "projectName": "LacunaGenetics",
-      "projectPath": "c:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj",
+      "projectPath": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj",
       "packagesPath": "C:\\Users\\sarak\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\obj\\",
+      "outputPath": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\sarak\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -1,6 +1,6 @@
 namespace LacunaGenetics
 {
-    public class Job {
+    public class JobDTO {
 
         public string id { get; set; }
         public string type { get; set; }

@@ -43,7 +43,7 @@ namespace LacunaGenetics.Service
             return nucleobases;
         }
 
-        public static string encodeString(Job job) 
+        public static string encodeString(JobDTO job) 
         {
             string binString = getBinaryString(job.strand);
             string hexString = getHexString(binString);
@@ -79,7 +79,7 @@ namespace LacunaGenetics.Service
             return hexString;
         }
 
-        public static CheckGeneResponseDTO checkGene(Job job) 
+        public static CheckGeneResponseDTO checkGene(JobDTO job) 
         {
             DecodedStrandResponseDTO strandEncoded = decodeToString(job.strandEncoded); 
             string templateStrand = findTemplateStrand(strandEncoded.strand);

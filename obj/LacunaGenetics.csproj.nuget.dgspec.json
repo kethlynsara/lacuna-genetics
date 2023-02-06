@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj": {}
+    "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj": {
+    "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj",
+        "projectUniqueName": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj",
         "projectName": "LacunaGenetics",
-        "projectPath": "C:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\LacunaGenetics.csproj",
+        "projectPath": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\LacunaGenetics.csproj",
         "packagesPath": "C:\\Users\\sarak\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sarak\\Downloads\\C#\\LacunaGenetics\\obj\\",
+        "outputPath": "C:\\Users\\sarak\\Downloads\\lacuna-genetics\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\sarak\\AppData\\Roaming\\NuGet\\NuGet.Config"

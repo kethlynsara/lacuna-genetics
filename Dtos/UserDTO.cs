@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace LacunaGenetics
 {
-     public class User
+     public class UserDTO
      {
         
         public string username { get; set; }
