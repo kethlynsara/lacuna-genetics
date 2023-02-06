@@ -16,6 +16,15 @@
   - **Encode strand operation:** take the strand parameter, which is the strand in String format, and encode it to the Binary format
   - **Check gene operation:**  tell whether or not a particular gene is activated in the retrieved DNA strand. Both gene and DNA strands are retrieved in Binary formats
 
+## Usage
+
+```bash
+$ git clone https://github.com/kethlynsara/lacuna-genetics.git
+
+$ cd lacuna-genetics
+
+$ dotnet run
+```
 
 ## Technologies
 <div align=center>  
