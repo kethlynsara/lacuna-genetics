@@ -1,8 +1,4 @@
-using System;
 using System.Text;
-using System.Collections;
-using System.Net;
-using System.Linq;
 
 namespace LacunaGenetics.Service
 {
@@ -49,10 +45,38 @@ namespace LacunaGenetics.Service
 
         public static string encodeString(Job job) 
         {
-            var plainTextBytes = Encoding.UTF8.GetBytes(job.strand);
-            Console.WriteLine("ENCODED: " + System.Text.Encoding.UTF8.GetBytes(job.strand));
-            Console.WriteLine("ENCODED: " + Convert.ToBase64String(plainTextBytes));
-            return Convert.ToBase64String(plainTextBytes);
+            string binString = getBinaryString(job.strand);
+            string hexString = getHexString(binString);
+            byte[] bytes = Encoding.BigEndianUnicode.GetBytes(hexString);            
+            string base64String = Convert.ToBase64String(bytes);
+            return base64String;
+        }
+
+        private static string getBinaryString(string strand)
+        {
+            string binString = "";        
+            for (int i = 0; i < strand.Length; i++)
+            {
+                if (strand[i].Equals('A')) binString += "00";
+                else if (strand[i].Equals('C')) binString += "01";
+                else if (strand[i].Equals('G')) binString += "10";
+                else if (strand[i].Equals('T')) binString += "11";
+            }
+            Console.WriteLine("bin string: " + binString);            
+            return binString;
+        }
+
+        private static string getHexString(string binString)
+        {
+            int rest = binString.Length % 4;
+            binString = binString.PadLeft(rest, '0');
+            string hexString = "";
+
+            for(int i = 0; i <= binString.Length - 4; i +=4)
+            {
+                hexString += string.Format("{0:X}", Convert.ToByte(binString.Substring(i, 4), 2));
+            }
+            return hexString;
         }
 
         public static CheckGeneResponseDTO checkGene(Job job) 
@@ -93,7 +117,6 @@ namespace LacunaGenetics.Service
         {
             string sub = strand.Substring(0,3);
             int qtd = strand.Length;
-            Console.WriteLine("strand template SUB: " + sub);
         
             if (sub != "CAT")
             {
