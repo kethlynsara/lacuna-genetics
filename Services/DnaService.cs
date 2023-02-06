@@ -9,9 +9,9 @@ namespace LacunaGenetics.Service
     
     public class DnaService {
 
-        public static DecodedStrandResponseDTO decodeToString(Job job)
+        public static DecodedStrandResponseDTO decodeToString(string strandEncoded)
         {
-            byte[] bytesArray = Convert.FromBase64String(job.strandEncoded);
+            byte[] bytesArray = Convert.FromBase64String(strandEncoded);
             string hexString = BitConverter.ToString(bytesArray);
             string hexStringTrim = hexString.Replace("-", "");
             String binString = hexStringTrim
@@ -57,31 +57,34 @@ namespace LacunaGenetics.Service
 
         public static CheckGeneResponseDTO checkGene(Job job) 
         {
-            string templateStrand = findTemplateStrand(job.strandEncoded);
-            string geneEncoded = job.geneEncoded;
+            DecodedStrandResponseDTO strandEncoded = decodeToString(job.strandEncoded); 
+            string templateStrand = findTemplateStrand(strandEncoded.strand);
+            DecodedStrandResponseDTO geneEncoded = decodeToString(job.geneEncoded);
+            string geneDecoded = geneEncoded.strand;
             int templateStrandLength = templateStrand.Length;
-            int geneEncodedLength = geneEncoded.Length;
-            int halfGeneLength = geneEncodedLength / 2;
+            int geneEncodedLength = geneDecoded.Length;
+            int halfGeneLength = geneEncodedLength / 2 - 1;
             CheckGeneResponseDTO obj = new CheckGeneResponseDTO();
             obj.isActivated = false;
 
             int i = 0;
-            while (halfGeneLength < (geneEncodedLength - 1) && !obj.isActivated)
+            while (halfGeneLength <= (geneEncodedLength - halfGeneLength) && !obj.isActivated)
             {
-                string halfGene =  geneEncoded.Substring(i, (halfGeneLength));			
+                string halfGene =  geneDecoded.Substring(i, halfGeneLength);			
 			    int j = 0;
-                while (halfGeneLength < (templateStrandLength - j) && !obj.isActivated)
+                int peaceStrandLength = halfGeneLength;
+                while (peaceStrandLength <= (templateStrandLength - peaceStrandLength) && !obj.isActivated)
 			    {
-                    string halfStrand = templateStrand.Substring(j, halfGeneLength);
-                    Console.WriteLine("halfStrand: " + halfStrand);
-                    Console.WriteLine("");
+                    string halfStrand = templateStrand.Substring(j, peaceStrandLength);
                     if (halfStrand == halfGene) 
                     {
                         obj.isActivated = true;
                     }
                     j++;
+                    peaceStrandLength++;
 			    }			
-			    i++;		
+			    i++;
+                halfGeneLength++;		
             }            
             return obj;
         }

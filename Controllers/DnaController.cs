@@ -44,7 +44,7 @@ namespace LacunaGenetics.Controller
 
         public static async void postDecodeToString(Job job, string token) 
         {
-            DecodedStrandResponseDTO decodedString = DnaService.decodeToString(job);            
+            DecodedStrandResponseDTO decodedString = DnaService.decodeToString(job.strandEncoded);            
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -63,9 +63,19 @@ namespace LacunaGenetics.Controller
             Console.WriteLine("encoded string: " + encodeString);
         }
 
-        public static void postCheckGene(Job job) {
+        public static void postCheckGene(Job job, string token) {
             CheckGeneResponseDTO isActivatedObj  =  DnaService.checkGene(job);
-            Console.WriteLine("check gene is activated? " + isActivatedObj.isActivated);
+            using (HttpClient httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                
+                var json = JsonConvert.SerializeObject(isActivatedObj);
+                var payload = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = httpClient.PostAsync( $"{url}/{job.id}/gene", payload).Result.Content.ReadAsStringAsync().Result;
+                Console.WriteLine("response: " + response);
+                var jsonDeserialized = JsonConvert.DeserializeObject<ApiResponseDTO>(response);
+                Console.WriteLine($"check gene API RESPONSE:  {jsonDeserialized.code}! {jsonDeserialized.message}");
+            }
         }
         
         private static string getToken(User user) 
@@ -86,7 +96,7 @@ namespace LacunaGenetics.Controller
         {
             if (job.type == "DecodeStrand") postDecodeToString(job, token);
             else if (job.type == "EncodeStrand") postEncodeString(job);
-            else if (job.type == "CheckGene") postCheckGene(job);
+            else if (job.type == "CheckGene") postCheckGene(job, token);
         }
     
     }
