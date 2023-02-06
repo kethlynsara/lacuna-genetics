@@ -14,7 +14,7 @@
 - Request a job
   - **Decode strand operation:** take the strandEncoded parameter, which is a Base64 string of the strand in Binary format, and decode it to the String format
   - **Encode strand operation:** take the strand parameter, which is the strand in String format, and encode it to the Binary format
-  - **Check gene operation**  tell whether or not a particular gene is activated in the retrieved DNA strand. Both gene and DNA strands are retrieved in Binary formats
+  - **Check gene operation:**  tell whether or not a particular gene is activated in the retrieved DNA strand. Both gene and DNA strands are retrieved in Binary formats
 
 
 ## Technologies
